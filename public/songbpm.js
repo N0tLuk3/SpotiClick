@@ -24,6 +24,15 @@ export class SongBpmClient {
     if (trackName) search.set('title', trackName);
     if (artistNames?.length) search.set('artist', artistNames.join(', '));
 
+    if (spotifyToken) {
+      try {
+        const spotifyBpm = await this.fetchFromSpotifyAudioFeatures(trackId, spotifyToken);
+        return { bpm: spotifyBpm, source: 'spotify', raw: null };
+      } catch (error) {
+        this.logger.error('[Spotify Audio Features]', error.message);
+      }
+    }
+
     try {
       const response = await fetch(`${SONG_BPM_ENDPOINT}/${encodeURIComponent(trackId)}?${search.toString()}`);
       if (!response.ok) {
@@ -33,12 +42,10 @@ export class SongBpmClient {
       const data = await response.json();
       const bpm = extractBpmFromResponse(data);
       if (!bpm) throw new Error('GetSongBPM Antwort enthielt keine BPM');
-      return { bpm, source: 'getsongbpm', raw: data };
+      return { bpm, source: spotifyToken ? 'getsongbpm-fallback' : 'getsongbpm', raw: data };
     } catch (error) {
       this.logger.error('[GetSongBPM]', error.message);
-      if (!spotifyToken) throw error;
-      const spotifyBpm = await this.fetchFromSpotifyAudioFeatures(trackId, spotifyToken);
-      return { bpm: spotifyBpm, source: 'spotify-fallback' };
+      throw error;
     }
   }
 
