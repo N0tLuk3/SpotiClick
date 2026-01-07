@@ -59,6 +59,7 @@ export class SpotifyController {
       headers: { Authorization: `Bearer ${this.token}` }
     });
     if (!response.ok) return null;
+    if (response.status === 204) return null;
     return response.json();
   }
 }
