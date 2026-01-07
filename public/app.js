@@ -85,7 +85,9 @@ async function ensureMetronomeForTrack(track, paused) {
   metronome.setBpm(info.bpm);
   metronome.start();
   updateMetronomeState(true);
-  setBpmValue(info.bpm, info.source === 'spotify-fallback' ? 'Spotify' : 'GetSongBPM');
+  const sourceLabel = info.source === 'spotify' ? 'Spotify' : 'GetSongBPM';
+  const finalLabel = info.source === 'getsongbpm-fallback' ? `${sourceLabel} Fallback` : sourceLabel;
+  setBpmValue(info.bpm, finalLabel);
 }
 
 async function handleStateChange(state) {

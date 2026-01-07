@@ -1,6 +1,6 @@
 # SpotiClick
 
-Metronom für Spotify, das beim Starten eines Songs automatisch losklickt, beim Pausieren stoppt und seine BPM von [GetSongBPM.com](https://getsongbpm.com) bezieht. Das Backend fungiert als einfacher Proxy und die Oberfläche läuft komplett im Browser. **Wichtig:** Die Nutzung der GetSongBPM-API ist nur erlaubt, wenn du einen Link zurück zu [GetSongBPM.com](https://getsongbpm.com) platzierst (siehe Hinweis unten).
+Metronom für Spotify, das beim Starten eines Songs automatisch losklickt, beim Pausieren stoppt und seine BPM primär aus Spotify Audio Features bezieht. Wenn Spotify nicht antwortet, greift SpotiClick auf [GetSongBPM.com](https://getsongbpm.com) zurück. Das Backend fungiert als einfacher Proxy und die Oberfläche läuft komplett im Browser. **Wichtig:** Die Nutzung der GetSongBPM-API ist nur erlaubt, wenn du einen Link zurück zu [GetSongBPM.com](https://getsongbpm.com) platzierst (siehe Hinweis unten).
 
 ## Voraussetzungen
 
@@ -33,8 +33,8 @@ Metronom für Spotify, das beim Starten eines Songs automatisch losklickt, beim 
 1. Besorge dir ein Spotify OAuth Token (z. B. über die [Spotify Web Console](https://developer.spotify.com/console)).
 2. Trage das Token im Feld „Spotify OAuth Token“ ein und klicke auf **Verbinden**.
 3. Sobald ein Song auf deinem Spotify-Account gestartet oder fortgesetzt wird, holt SpotiClick die BPM:
-   - Primär über GetSongBPM via `/api/songbpm/spotify/<trackId>` (konfigurierbar über `.env`).
-   - Fallback: Spotify Audio Features (`/v1/audio-features/{id}`), falls GetSongBPM nicht antwortet.
+   - Primär über Spotify Audio Features (`/v1/audio-features/{id}`).
+   - Fallback: GetSongBPM via `/api/songbpm/spotify/<trackId>` (konfigurierbar über `.env`), falls Spotify nicht antwortet.
 4. Das Metronom startet automatisch, wenn der Song läuft, und stoppt beim Pausieren.
 
 ## Anpassen des GetSongBPM-Aufrufs
